@@ -1,10 +1,14 @@
 package com.mindex.challenge.controller;
 
 import com.mindex.challenge.data.Employee;
+import com.mindex.challenge.dto.ReportingStructure;
 import com.mindex.challenge.service.EmployeeService;
+import com.mindex.challenge.service.ReportingStructureService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -13,6 +17,8 @@ public class EmployeeController {
 
     @Autowired
     private EmployeeService employeeService;
+    @Autowired
+    private ReportingStructureService reportingStructure;
 
     @PostMapping("/employee")
     public Employee create(@RequestBody Employee employee) {
@@ -34,5 +40,10 @@ public class EmployeeController {
 
         employee.setEmployeeId(id);
         return employeeService.update(employee);
+    }
+    @GetMapping("/reporting-structure/{employeeId}")
+    public ResponseEntity<ReportingStructure> getReportingStructure(@PathVariable String employeeId) {
+        ReportingStructure reportingNumber = reportingStructure.getReportingStructure(employeeId);
+        return new ResponseEntity<>(reportingNumber, HttpStatus.OK);
     }
 }
